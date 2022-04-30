@@ -9,6 +9,10 @@ vim.keybinds = {
     dbmap = vim.api.nvim_buf_del_keymap,    
     opts = {noremap = true, silent = true}    
 }    
+
+-- 保存和关闭
+vim.keybinds.gmap("n", "<leader>s", "<cmd>w<CR>", vim.keybinds.opts)    
+vim.keybinds.gmap("n", "<leader>q", "<cmd>q<CR>", vim.keybinds.opts)    
     
 -- 插入模下 jj 退出插入模式    
 vim.keybinds.gmap("i", "jj", "<Esc>", vim.keybinds.opts)    

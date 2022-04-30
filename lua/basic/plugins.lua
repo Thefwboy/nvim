@@ -101,6 +101,79 @@ return packer.startup(function(use)
     end,
   }
 
+  -- IndentLine
+  use {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "BufReadPre",
+    config = function()
+      require("conf.indentblankline").setup()
+    end,
+  }
+
+  -- 自动匹配括号
+  use {
+    "windwp/nvim-autopairs",
+    config = function()
+        require("conf.nvim-autopairs").setup()
+    end
+  }
+
+  -- 快速更改单词
+  use {
+    "AndrewRadev/switch.vim",
+    config = function()
+        require("conf.switch").setup()
+    end
+  }
+
+  -- 内置终端
+  use {
+    "akinsho/toggleterm.nvim",
+    config = function()
+        require("conf.toggleterm").setup()
+    end
+  }
+
+  -- 键位绑定器
+  use {
+    "folke/which-key.nvim",
+    config = function()
+        require("conf.which-key").setup()
+    end
+  }
+
+  -- LSP 基础服务
+  use {
+      "neovim/nvim-lspconfig",
+      config = function()
+          require("conf.nvim-lspconfig")
+      end
+  }
+                                             
+  -- 自动安装 LSP
+  use {
+      "williamboman/nvim-lsp-installer",
+      config = function()
+          require("conf.nvim-lsp-installer")
+      end
+  }                                          
+                                             
+  -- LSP UI 美化
+  use {
+      "tami5/lspsaga.nvim",
+      config = function()
+          require("conf.lspsaga")
+      end
+  }
+
+  -- LSP 进度提示
+  use {
+    "j-hui/fidget.nvim",
+    config = function()
+        require("conf.fidget")
+    end
+  }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
