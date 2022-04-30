@@ -17,10 +17,10 @@ end
 
 -- Autocommand that reloads neovim whenever you save the plugins.lua file
 vim.cmd [[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
+augroup packer_user_config
+autocmd!
+autocmd BufWritePost plugins.lua source <afile> | PackerSync
+augroup end
 ]]
 
 -- Use a protected call so we don't error out on first use
@@ -45,7 +45,7 @@ return packer.startup(function(use)
 
   -- 使用中文文档
   use {
-      "yianwillis/vimcdoc",
+    "yianwillis/vimcdoc",
   }
 
   -- Colorscheme
@@ -79,14 +79,14 @@ return packer.startup(function(use)
 
   -- 为了能让状态栏显示 git 信息，所以这个插件是必须的
   use {
-      "lewis6991/gitsigns.nvim",
-      requires = {
-          -- 依赖于该插件（一款 Lua 开发使用的插件）
-          "nvim-lua/plenary.nvim"
-      },
-      config = function()
-          require("conf.gitsigns").setup()
-      end
+    "lewis6991/gitsigns.nvim",
+    requires = {
+      -- 依赖于该插件（一款 Lua 开发使用的插件）
+      "nvim-lua/plenary.nvim"
+    },
+    config = function()
+      require("conf.gitsigns").setup()
+    end
   }
 
   -- Buffer line
@@ -114,7 +114,7 @@ return packer.startup(function(use)
   use {
     "windwp/nvim-autopairs",
     config = function()
-        require("conf.nvim-autopairs").setup()
+      require("conf.nvim-autopairs").setup()
     end
   }
 
@@ -122,7 +122,7 @@ return packer.startup(function(use)
   use {
     "AndrewRadev/switch.vim",
     config = function()
-        require("conf.switch").setup()
+      require("conf.switch").setup()
     end
   }
 
@@ -130,7 +130,7 @@ return packer.startup(function(use)
   use {
     "akinsho/toggleterm.nvim",
     config = function()
-        require("conf.toggleterm").setup()
+      require("conf.toggleterm").setup()
     end
   }
 
@@ -138,39 +138,51 @@ return packer.startup(function(use)
   use {
     "folke/which-key.nvim",
     config = function()
-        require("conf.which-key").setup()
+      require("conf.which-key").setup()
     end
   }
 
   -- LSP 基础服务
   use {
-      "neovim/nvim-lspconfig",
-      config = function()
-          require("conf.nvim-lspconfig")
-      end
+    "neovim/nvim-lspconfig",
+    config = function()
+      require("conf.nvim-lspconfig")
+    end
   }
-                                             
+
   -- 自动安装 LSP
   use {
-      "williamboman/nvim-lsp-installer",
-      config = function()
-          require("conf.nvim-lsp-installer")
-      end
-  }                                          
-                                             
+    "williamboman/nvim-lsp-installer",
+    config = function()
+      require("conf.nvim-lsp-installer")
+    end
+  }
+
   -- LSP UI 美化
   use {
-      "tami5/lspsaga.nvim",
-      config = function()
-          require("conf.lspsaga")
-      end
+    "tami5/lspsaga.nvim",
+    config = function()
+      require("conf.lspsaga")
+    end
   }
 
   -- LSP 进度提示
   use {
     "j-hui/fidget.nvim",
     config = function()
-        require("conf.fidget")
+      require("conf.fidget")
+    end
+  }
+
+  -- 语法高亮
+  use {
+    "nvim-treesitter/nvim-treesitter",
+    run = {":TSupdate"},
+    requires = {
+      "p00f/nvim-ts-rainbow" -- 彩虹括号
+    },
+    config = function()
+      require("conf.nvim-treesitter")
     end
   }
 

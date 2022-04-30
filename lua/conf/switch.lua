@@ -1,7 +1,7 @@
 local M = {}
 function M.setup()
--- NOTE: switch 手动定义需要增加的反意单词
-local switch_words = {
+  -- NOTE: switch 手动定义需要增加的反意单词
+  local switch_words = {
     {"true", "false"},
     {"on", "off"},
     {"yes", "no"},
@@ -9,11 +9,11 @@ local switch_words = {
     {"+", "-"},
     {">", "<"},
     {"=", "!="}
-}
--- enable Enable ENABLE
--- 定义增加单词的容器
-local push_words = {}
-for _, value in ipairs(switch_words) do
+  }
+  -- enable Enable ENABLE
+  -- 定义增加单词的容器
+  local push_words = {}
+  for _, value in ipairs(switch_words) do
     local w1, w2 = value[1], value[2]
     -- 全小写
     table.insert(push_words, value)
@@ -23,10 +23,10 @@ for _, value in ipairs(switch_words) do
     w1, _ = string.gsub(w1, "^%l", string.upper)
     w2, _ = string.gsub(w2, "^%l", string.upper)
     table.insert(push_words, {w1, w2})
+  end
+  -- 放入全局变量
+  vim.g.switch_custom_definitions = push_words
+  -- 快速取反意单词，如 true 变为 false
+  vim.keybinds.gmap("n", "gs", ":Switch<CR>", vim.keybinds.opts)
 end
--- 放入全局变量
-vim.g.switch_custom_definitions = push_words
--- 快速取反意单词，如 true 变为 false
-vim.keybinds.gmap("n", "gs", ":Switch<CR>", vim.keybinds.opts)
-end 
 return M
