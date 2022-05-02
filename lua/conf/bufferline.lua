@@ -1,4 +1,8 @@
 local M = {}
+
+local keymap = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
+
 function M.setup()
   require("bufferline").setup {
     options = {
@@ -36,15 +40,9 @@ function M.setup()
       end
     }
   }
-  -- 关闭当前 buffer，由 bufdelete 插件所提供的方法
-  vim.keybinds.gmap("n", "<C-q>", "<cmd>Bdelete!<CR>", vim.keybinds.opts)
-  -- 切换上一个缓冲区
-  vim.keybinds.gmap("n", "<C-h>", "<cmd>BufferLineCyclePrev<CR>", vim.keybinds.opts)
-  -- 切换下一个缓冲区
-  vim.keybinds.gmap("n", "<C-l>", "<cmd>BufferLineCycleNext<CR>", vim.keybinds.opts)
-  -- 关闭左侧缓冲区
-  vim.keybinds.gmap("n", "<leader>bh", "<cmd>BufferLineCloseLeft<CR>", vim.keybinds.opts)
-  -- 关闭右侧缓冲区
-  vim.keybinds.gmap("n", "<leader>bl", "<cmd>BufferLineCloseRight<CR>", vim.keybinds.opts)
+
+  keymap("n", "<C-q>", "<cmd>Bdelete!<CR>", opts)
+  keymap("n", "<C-h>", "<cmd>BufferLineCyclePrev<CR>", opts)
+  keymap("n", "<C-l>", "<cmd>BufferLineCycleNext<CR>", opts)
 end
 return M

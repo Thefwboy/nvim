@@ -1,14 +1,39 @@
--- FIX: tabline 在某些计算机上有 1 个 BUG
--- 当出现：
---    TabNine is not executable
--- 等字样时，需要手动执行（仅限 Manjaro）：
---    rm ~/.local/share/nvim/plugged/cmp-tabnine/binaries
---    ~/.local/share/nvim/plugged/cmp-tabnine/install.sh
-local lspkind = require("lspkind")
-local cmp = require("cmp")
-cmp.setup(
----@diagnostic disable-next-line: redundant-parameter
-{
+local cmp_status_ok, cmp = pcall(require, "cmp")
+if not cmp_status_ok then
+  return
+end
+
+--   פּ ﯟ   some other good icons
+local kind_icons = {
+  Text = "",
+  Method = "m",
+  Function = "",
+  Constructor = "",
+  Field = "",
+  Variable = "",
+  Class = "",
+  Interface = "",
+  Module = "",
+  Property = "",
+  Unit = "",
+  Value = "",
+  Enum = "",
+  Keyword = "",
+  Snippet = "",
+  Color = "",
+  File = "",
+  Reference = "",
+  Folder = "",
+  EnumMember = "",
+  Constant = "",
+  Struct = "",
+  Event = "",
+  Operator = "",
+  TypeParameter = "",
+}
+
+-- find more here: https://www.nerdfonts.com/cheat-sheet
+cmp.setup {
   -- 指定补全引擎
   snippet = {
     expand = function(args)
@@ -30,16 +55,21 @@ cmp.setup(
   ),
   -- 格式化补全菜单
   formatting = {
-    format = lspkind.cmp_format(
-    {
-      with_text = true,
-      maxwidth = 50,
-      before = function(entry, vim_item)
-        vim_item.menu = "[" .. string.upper(entry.source.name) .. "]"
-        return vim_item
-      end
-    }
-    )
+    fields = { "kind", "abbr", "menu" },
+    format = function(entry, vim_item)
+    -- Kind icons
+    vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+    vim_item.menu = ({
+      vsnip = "[Snippet]",
+      nvim_lsp = "[LSP]",
+      path = "[Path]",
+      buffer = "[Buffer]",
+      cmdline = "[Cmd]",
+      spell = "[Spell]",
+      cmp_tabnine = "[AISnip]"
+    })[entry.source.name]
+    return vim_item
+  end,
   },
   -- 对补全建议排序
   sorting = {
@@ -58,13 +88,9 @@ cmp.setup(
   },
   -- 绑定补全相关的按键
   mapping = {
-    -- 上一个
     ["<C-p>"] = cmp.mapping.select_prev_item(),
-    -- 下一个
     ["<C-n>"] = cmp.mapping.select_next_item(),
-    -- 选择补全
     ["<CR>"] = cmp.mapping.confirm(),
-    --  出现或关闭补全
     ["<C-k>"] = cmp.mapping(
     {
       i = function()
@@ -83,8 +109,6 @@ cmp.setup(
       end
     }
     ),
-    -- 类似于 IDEA 的功能，如果没进入选择框，tab
-    -- 会选择下一个，如果进入了选择框，tab 会确认当前选择
     ["<Tab>"] = cmp.mapping(
     function(fallback)
       if cmp.visible() then
@@ -99,29 +123,36 @@ cmp.setup(
     end,
     {"i", "s", "c"}
     )
-  }
+  },
+  confirm_opts = {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = false,
+  },
+  window = {
+    documentation = {
+      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      winhighlight = "NormalFloat:NormalFloat,FloatBorder:TelescopeBorder",
+    },
+  },
+  experimental = {
+    ghost_text = false,
+    native_menu = false,
+  },
 }
-)
+
 -- 命令行 / 模式提示
-cmp.setup.cmdline(
-"/",
-{
+cmp.setup.cmdline("/", {
   sources = {
     {name = "buffer"}
   }
-}
-)
+})
+
 -- 命令行 : 模式提示
-cmp.setup.cmdline(
-":",
-{
-  sources = cmp.config.sources(
-  {
+cmp.setup.cmdline(":", {
+  sources = cmp.config.sources({
     {name = "path"}
-  },
-  {
+  }, {
     {name = "cmdline"}
-  }
-  )
-}
-)
+  })
+})
+
