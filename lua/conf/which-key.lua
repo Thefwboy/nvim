@@ -49,6 +49,12 @@ function M.setup()
       u = { "<cmd>PackerUpdate<cr>", "Update" },
     },
 
+    g = {
+      name = "LSP",
+      r = { "<cmd>Lspsaga rename<cr>", "Rename" },
+      a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
+      l = { "<cmd>Lspsaga show_line_diagnostics<cr>", "Show Error"}
+    }
   }
 
   whichkey.setup(conf)
@@ -56,3 +62,5 @@ function M.setup()
 end
 
 return M
+
+

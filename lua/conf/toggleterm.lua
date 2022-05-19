@@ -17,7 +17,7 @@ function M.setup()
   local Terminal = require("toggleterm.terminal").Terminal
   local function inInsert()
     -- 删除 Esc 的映射
-    vim.keybinds.dgmap("t", "<Esc>")
+    -- vim.keybinds.dgmap("t", "<Esc>")
   end
   -- 新建浮动终端
   local floatTerm =
@@ -31,11 +31,11 @@ function M.setup()
     on_open = function(term)
       inInsert()
       -- 浮动终端中 Esc 是退出
-      vim.keybinds.bmap(term.bufnr, "t", "<Esc>", "<C-\\><C-n>:close<CR>", vim.keybinds.opts)
+      -- vim.keybinds.bmap(term.bufnr, "t", "<Esc>", "<C-\\><C-n>:close<CR>", vim.keybinds.opts)
     end,
     on_close = function()
       -- 重新映射 Esc
-      vim.keybinds.gmap("t", "<Esc>", "<C-\\><C-n>", vim.keybinds.opts)
+      -- vim.keybinds.gmap("t", "<Esc>", "<C-\\><C-n>", vim.keybinds.opts)
     end
   }
   )
@@ -52,11 +52,11 @@ function M.setup()
     on_open = function(term)
       inInsert()
       -- lazygit 中 q 是退出
-      vim.keybinds.bmap(term.bufnr, "i", "q", "<cmd>close<CR>", vim.keybinds.opts)
+      -- vim.keybinds.bmap(term.bufnr, "i", "q", "<cmd>close<CR>", vim.keybinds.opts)
     end,
     on_close = function()
       -- 重新映射 Esc
-      vim.keybinds.gmap("t", "<Esc>", "<C-\\><C-n>", vim.keybinds.opts)
+      -- vim.keybinds.gmap("t", "<Esc>", "<C-\\><C-n>", vim.keybinds.opts)
     end
   }
   )

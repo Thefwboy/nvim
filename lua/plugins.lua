@@ -58,26 +58,16 @@ return packer.startup(function(use)
     end,
   }
 
-  -- nvim-tree
+  -- Better icons
   use {
-    "kyazdani42/nvim-tree.lua",
-    requires = {
-      "kyazdani42/nvim-web-devicons",
-    },
+    "kyazdani42/nvim-web-devicons",
+    module = "nvim-web-devicons",
     config = function()
-      require("conf.nvim-tree").setup()
+      require("nvim-web-devicons").setup { default = true }
     end,
   }
 
-  -- Status line
-  use {
-    "windwp/windline.nvim",
-    event = "VimEnter",
-    -- after = "nvim-treesitter",
-    config = function()
-      require("conf.windline").setup()
-    end,
-  }
+
 
   -- 为了能让状态栏显示 git 信息，所以这个插件是必须的
   use {
@@ -90,6 +80,36 @@ return packer.startup(function(use)
       require("conf.gitsigns").setup()
     end
   }
+
+  -- nvim-tree
+  use {
+    "kyazdani42/nvim-tree.lua",
+    wants = "nvim-web-devicons",
+    config = function()
+      require("conf.nvim-tree").setup()
+    end,
+  }
+
+  -- Status line
+  use {
+    "nvim-lualine/lualine.nvim",
+    event = "VimEnter",
+    after = "nvim-treesitter",
+    config = function()
+      require("conf.lualine").setup()
+    end,
+    wants = "nvim-web-devicons",
+  }
+  use {
+    "SmiteshP/nvim-gps",
+    requires = "nvim-treesitter/nvim-treesitter",
+    module = "nvim-gps",
+    wants = "nvim-treesitter",
+    config = function()
+      require("nvim-gps").setup()
+    end,
+  }
+
 
   -- Buffer line
   use {
@@ -144,20 +164,16 @@ return packer.startup(function(use)
     end
   }
 
-  -- LSP 基础服务
+  -- LSP
   use {
     "neovim/nvim-lspconfig",
     config = function()
-      require("conf.nvim-lspconfig")
-    end
-  }
-
-  -- 自动安装 LSP
-  use {
-    "williamboman/nvim-lsp-installer",
-    config = function()
-      require("conf.nvim-lsp-installer")
-    end
+      require("conf.lsp").setup()
+    end,
+    requires = {
+      "williamboman/nvim-lsp-installer",
+      "ray-x/lsp_signature.nvim",
+    },
   }
 
   -- LSP UI 美化
@@ -181,7 +197,8 @@ return packer.startup(function(use)
     "nvim-treesitter/nvim-treesitter",
     run = {":TSupdate"},
     requires = {
-      "p00f/nvim-ts-rainbow" -- 彩虹括号
+      "p00f/nvim-ts-rainbow", -- 彩虹括号
+      "windwp/nvim-ts-autotag"
     },
     config = function()
       require("conf.nvim-treesitter")
@@ -212,10 +229,10 @@ return packer.startup(function(use)
   use {
     "numToStr/Comment.nvim",
     requires = {
-        "JoosepAlviste/nvim-ts-context-commentstring"
+      "JoosepAlviste/nvim-ts-context-commentstring"
     },
     config = function()
-        require("conf.Comment")
+      require("conf.Comment")
     end
   }
 
@@ -223,13 +240,41 @@ return packer.startup(function(use)
   use {
     "liuchengxu/vista.vim",
     config = function()
-        require("conf.vista")
+      require("conf.vista")
+    end
+  }
+  use {
+    'stevearc/aerial.nvim',
+    config = function() require('aerial').setup() end
+  }
+
+  -- 代码截图
+  use {
+    "kristijanhusak/vim-carbon-now-sh",
+  }
+
+  -- 显示网页色
+  use {
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      vim.o.termguicolors = true
+      require("colorizer").setup()
     end
   }
 
-  -- Translator
+  -- Markdown
   use {
-    "voldikss/vim-translator",
+    "iamcco/markdown-preview.nvim",
+    run = function()
+      vim.fn["mkdp#util#install"]()
+    end,
+    ft = "markdown",
+    cmd = { "MarkdownPreview" },
+  }
+
+  -- 多光标模式
+  use {
+    "terryma/vim-multiple-cursors",
   }
 
   -- Automatically set up your configuration after cloning packer.nvim
@@ -238,3 +283,5 @@ return packer.startup(function(use)
     require("packer").sync()
   end
 end)
+
+

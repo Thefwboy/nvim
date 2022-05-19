@@ -4,10 +4,6 @@ vim.g.mapleader = " "
 local keymap = vim.api.nvim_set_keymap
 local default_opts = { noremap = true, silent = true }
 
--- 保存和关闭
-keymap("n", "<leader>w", "<cmd>w<CR>", default_opts)
-keymap("n", "<leader>q", "<cmd>q<CR>", default_opts)
-
 -- Better escape using jk in insert and terminal mode
 keymap("i", "jk", "<ESC>", default_opts)
 
@@ -57,3 +53,4 @@ keymap("n", "[<Space>", "O<Esc>", default_opts)
 
 -- Terminal
 keymap("t", "<Esc>", "<C-\\><C-n>", default_opts)
+

@@ -3,6 +3,20 @@ if not cmp_status_ok then
   return
 end
 
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+-- If you want insert `(` after select function or method item
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+cmp.event:on( 'confirm_done', cmp_autopairs.on_confirm_done({  map_char = { tex = '' } }))
+cmp_autopairs.lisp[#cmp_autopairs.lisp+1] = "racket"
+
 --   פּ ﯟ   some other good icons
 local kind_icons = {
   Text = "",
@@ -91,38 +105,25 @@ cmp.setup {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-n>"] = cmp.mapping.select_next_item(),
     ["<CR>"] = cmp.mapping.confirm(),
-    ["<C-k>"] = cmp.mapping(
-    {
-      i = function()
-        if cmp.visible() then
-          cmp.abort()
-        else
-          cmp.complete()
-        end
-      end,
-      c = function()
-        if cmp.visible() then
-          cmp.close()
-        else
-          cmp.complete()
-        end
-      end
-    }
-    ),
-    ["<Tab>"] = cmp.mapping(
-    function(fallback)
+    ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        local entry = cmp.get_selected_entry()
-        if not entry then
-          cmp.select_next_item({behavior = cmp.SelectBehavior.Select})
-        end
-        cmp.confirm()
+        cmp.select_next_item()
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
       else
         fallback()
       end
-    end,
-    {"i", "s", "c"}
-    )
+    end, { "i", "s", "c", }),
+
+    ["<S-Tab>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s", "c", }),
   },
   confirm_opts = {
       behavior = cmp.ConfirmBehavior.Replace,
