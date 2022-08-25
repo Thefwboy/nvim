@@ -5,7 +5,47 @@ if fn.empty(fn.glob(install_path)) > 0 then
   vim.cmd [[packadd packer.nvim]]
 end
 
-return require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
+-- 每次保存 plugins.lua 自动安装插件
+pcall(
+  vim.cmd,
+  [[
+    augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+    augroup end
+  ]]
+)
+
+-- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+	return
+end
+
+-- Have packer use a popup window
+packer.init({
+	display = {
+		open_fn = function()
+			return require("packer.util").float({ border = "rounded" })
+		end,
+	},
+})
+
+-- Install your plugins here
+return packer.startup(function(use)
+  use ("wbthomason/packer.nvim")
+
+  -- Colortheme
+  use {
+    "luisiacc/gruvbox-baby",
+    config = function()
+      vim.cmd("colorscheme gruvbox-baby")
+    end
+  }
+
+	-- Automatically set up your configuration after cloning packer.nvim
+	-- Put this at the end after all plugins
+	if PACKER_BOOTSTRAP then
+		require("packer").sync()
+	end
 end)
