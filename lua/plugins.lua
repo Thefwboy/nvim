@@ -82,6 +82,16 @@ return packer.startup(function(use)
   }
 
   use {
+    "neovim/nvim-lspconfig",
+    requires = {
+      "williamboman/nvim-lsp-installer"
+    },
+    config = function()
+      require("config.lsp").setup()
+    end
+  }
+
+  use {
     "hrsh7th/nvim-cmp",
     requires = {
       "hrsh7th/cmp-buffer",
