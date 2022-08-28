@@ -4,8 +4,39 @@ if not status_ok then
 end
 
 local servers = {
-  sumneko_lua = {},
+
+  sumneko_lua = {
+    settings = {
+
+      Lua = {
+        runtime = {
+          version = "LuaJIT",
+          path = vim.split(package.path, ";"),
+        },
+        diagnostics = {
+          globals = { "vim" },
+        },
+        workspace = {
+          library = {
+            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+            [vim.fn.stdpath("config") .. "/lua"] = true,
+          },
+        },
+      },
+    },
+  },
+
 }
+
+local lsp_signature = require "lsp_signature"
+lsp_signature.setup {
+  bind = true,
+  handler_opts = {
+    border = "rounded",
+  },
+}
+
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local function on_attach(client, bufnr)
   -- Enable completion triggered by <C-X><C-O>
@@ -22,6 +53,7 @@ end
 
 local opts = {
   on_attach = on_attach,
+  capabilities = capabilities,
   flags = {
     debounce_text_changes = 150,
   },

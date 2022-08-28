@@ -35,6 +35,8 @@ packer.init({
 return packer.startup(function(use)
   use ("wbthomason/packer.nvim")
 
+  use "wsdjeg/vimdoc-cn"
+
   -- Colortheme
   use {
     "luisiacc/gruvbox-baby",
@@ -83,7 +85,15 @@ return packer.startup(function(use)
   use {
     "neovim/nvim-lspconfig",
     requires = {
-      "williamboman/nvim-lsp-installer"
+      "williamboman/nvim-lsp-installer",
+      "ray-x/lsp_signature.nvim",
+      "folke/lua-dev.nvim",
+      {
+        "j-hui/fidget.nvim",
+        config = function()
+          require("fidget").setup{}
+        end
+      }
     },
     config = function()
       require("config.lsp").setup()
