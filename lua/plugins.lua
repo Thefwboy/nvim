@@ -63,6 +63,17 @@ return packer.startup(function(use)
   }
 
   use {
+    "nvim-lualine/lualine.nvim",
+    requires = {
+      "kyazdani42/nvim-web-devicons",
+      "arkav/lualine-lsp-progress"
+    },
+    config = function()
+      require("config.lualine").setup()
+    end
+  }
+
+  use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
     config = function()
