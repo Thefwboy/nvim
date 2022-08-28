@@ -60,7 +60,7 @@ local options = {
   -- 使用增强状态栏插件后不再需要 vim 的模式提示
   showmode = false,
   -- 使用系统剪贴板
-  clipboard = "unnamedplus"
+  clipboard = "unnamedplus",
 }
 
 for k, v in pairs(options) do
