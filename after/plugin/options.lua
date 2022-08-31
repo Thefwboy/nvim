@@ -61,6 +61,8 @@ local options = {
   showmode = false,
   -- 使用系统剪贴板
   clipboard = "unnamedplus",
+  -- 修改光标样式
+  guicursor = "n-c-i:hor20-Cursor/lCursor"
 }
 
 for k, v in pairs(options) do
